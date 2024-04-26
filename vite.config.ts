@@ -25,6 +25,11 @@ const makeManifest: () => PluginOption = () => {
   }
 }
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   plugins: [react(), makeManifest()],
   server: {
     open: 'workbench.html',

@@ -13,7 +13,7 @@ const promise = chrome.storage.local.get(STORAGE_KEY)
 
 const SyncCookie: React.FC = (() => {
   const { [STORAGE_KEY]: initRelations } = useSuspensePromise(promise)
-  const [relations, setRelations] = useState<SyncCookie.Relation[]>(initRelations)
+  const [relations, setRelations] = useState<SyncCookie.Relation[]>(initRelations || [])
 
   useUpdateEffect(() => {
     chrome.storage.local.set({
