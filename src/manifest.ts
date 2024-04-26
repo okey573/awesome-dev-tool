@@ -1,5 +1,7 @@
 import packageJson from '../package.json'
 
+type Manifest = chrome.runtime.ManifestV3
+
 export default {
   manifest_version: 3,
   name: packageJson.name,
@@ -22,4 +24,4 @@ export default {
   action: {
     default_popup: 'popup.html'
   }
-}
+} as Manifest
