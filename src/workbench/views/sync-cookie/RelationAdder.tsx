@@ -32,19 +32,19 @@ const App: React.FC<{
     layout={'inline'}
   >
     <Form.Item<Relation>
-      label="本地"
-      name="local"
+      label="来源域"
+      name="from"
       style={{ width: '30%' }}
-      rules={[{ required: true, message: '请输入本地域名' }]}
+      rules={[{ required: true, message: '请输入来源域名' }]}
     >
       <Input />
     </Form.Item>
 
     <Form.Item<Relation>
-      label="远端"
-      name="remote"
+      label="目标域"
+      name="to"
       style={{ width: '30%' }}
-      rules={[{ required: true, message: '请输入远端域名' }]}
+      rules={[{ required: true, message: '请输入目标域名' }]}
     >
       <Input />
     </Form.Item>

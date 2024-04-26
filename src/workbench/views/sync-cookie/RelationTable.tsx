@@ -93,15 +93,15 @@ const App: React.FC<{
 
   const columns = [
     {
-      title: '本地',
-      dataIndex: 'local',
+      title: '来源域',
+      dataIndex: 'from',
       editable: true,
       width: '35%',
       align: 'center' as const
     },
     {
-      title: '远端',
-      dataIndex: 'remote',
+      title: '目标域',
+      dataIndex: 'to',
       editable: true,
       width: '35%',
       align: 'center' as const

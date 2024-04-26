@@ -1,8 +1,8 @@
 namespace SyncCookie {
   interface Relation {
     key: string;
-    local: string;
-    remote: string;
+    from: string;
+    to: string;
     open: boolean;
   }
 

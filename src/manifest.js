@@ -15,7 +15,10 @@ export default {
   },
   permissions: [
     'storage',
-    'cookies'
+    'cookies',
+  ],
+  host_permissions: [
+    '<all_urls>'
   ],
   background: {
     service_worker: 'service-worker.js',
