@@ -5,4 +5,6 @@ namespace SyncCookie {
     remote: string;
     open: boolean;
   }
+
+  type StorageKey = 'SYNC_COOKIE_RELATIONS'
 }

@@ -59,6 +59,9 @@ const App: React.FC<{
     form.setFieldsValue({ name: '', age: '', address: '', ...record })
     setEditingKey(record.key)
   }
+  const deleteRecord = (record: Partial<Relation> & {key: React.Key}) => {
+    setRelations(relations.filter(i => i.key !== record.key))
+  }
 
   const cancel = () => {
     setEditingKey('')
@@ -142,7 +145,7 @@ const App: React.FC<{
             <Typography.Link disabled={editingKey !== ''} type="warning" onClick={() => edit(record)}>
               编辑
             </Typography.Link>
-            <Typography.Link disabled={editingKey !== ''} type={'danger'} onClick={() => edit(record)}>
+            <Typography.Link disabled={editingKey !== ''} type={'danger'} onClick={() => deleteRecord(record)}>
               删除
             </Typography.Link>
           </Space>

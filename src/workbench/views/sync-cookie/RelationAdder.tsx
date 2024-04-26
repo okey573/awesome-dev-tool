@@ -55,7 +55,10 @@ const App: React.FC<{
           添加
         </Button>
         <Button type="primary" onClick={
-          () => console.log(relations)
+          async () => {
+            console.log(relations)
+            console.log(await chrome.storage.local.get('SYNC_COOKIE_RELATIONS'))
+          }
         }>
           log
         </Button>
