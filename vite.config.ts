@@ -1,17 +1,24 @@
 import { resolve } from 'path'
+import url from 'url'
 import * as fs from 'fs'
 import { defineConfig } from 'vite'
 import type { PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
-import manifest from './src/manifest'
 
 const makeManifest: () => PluginOption = () => {
+  const manifestFile = resolve(__dirname, 'src/manifest.js')
   return {
     name: 'make-manifest',
+    enforce: 'post',
     buildStart() {
-      this.addWatchFile(resolve(__dirname, 'src/manifest.ts'))
+      this.addWatchFile(resolve(__dirname, 'src/manifest.js'))
     },
-    writeBundle() {
+    async writeBundle() {
+      let path = `manifestFile?${Date.now().toString()}`
+      if (process.platform === 'win32') {
+        path = url.pathToFileURL(manifestFile).href + '?' + Date.now().toString()
+      }
+      const { default: manifest } = await import(path)
       const dest = resolve(__dirname, 'dist/manifest.json')
       fs.writeFileSync(dest, JSON.stringify(manifest, null, 2))
     }

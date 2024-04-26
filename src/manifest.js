@@ -1,6 +1,6 @@
-import packageJson from '../package.json'
+import packageJson from '../package.json' assert { type: 'json' }
 
-type Manifest = chrome.runtime.ManifestV3
+// type Manifest = chrome.runtime.ManifestV3
 
 export default {
   manifest_version: 3,
@@ -11,7 +11,7 @@ export default {
     16: 'images/16.png',
     32: 'images/32.png',
     48: 'images/48.png',
-    128: 'images/128.png',
+    128: 'images/128.png'
   },
   permissions: [
     'storage',
@@ -22,6 +22,12 @@ export default {
     type: 'module'
   },
   action: {
-    default_popup: 'popup.html'
+    default_icon: {
+      16: 'images/16.png',
+      32: 'images/32.png',
+      48: 'images/48.png',
+      128: 'images/128.png'
+    },
+    // default_popup: 'popup.html'
   }
-} as Manifest
+}
