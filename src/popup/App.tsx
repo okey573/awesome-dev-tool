@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      popup do it
+      popup
     </>
   )
 }
