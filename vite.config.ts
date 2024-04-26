@@ -27,7 +27,7 @@ const makeManifest: () => PluginOption = () => {
 export default defineConfig({
   plugins: [react(), makeManifest()],
   server: {
-    open: 'popup.html',
+    open: 'workbench.html',
   },
   build: {
     watch: {},
