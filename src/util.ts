@@ -5,6 +5,13 @@ export const getHost = (s: string) => {
   return new URL('http://' + s).host
 }
 
+export const logLastError = (message: string, additionalLogger: () => void) => {
+  console.group(message)
+  console.error(chrome.runtime.lastError?.message)
+  additionalLogger?.()
+  console.groupEnd()
+}
+
 export default {
   getHost
 }

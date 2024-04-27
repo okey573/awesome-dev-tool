@@ -35,6 +35,7 @@ export default defineConfig({
     open: 'workbench.html',
   },
   build: {
+    chunkSizeWarningLimit: 1024,
     watch: {},
     rollupOptions: {
       input: {

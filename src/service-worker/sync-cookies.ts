@@ -1,4 +1,4 @@
-import { getHost } from '@/util.ts'
+import { getHost, logLastError } from '@/util.ts'
 
 console.log('sync-cookies')
 const StorageKey: SyncCookie.StorageKey = 'SYNC_COOKIE_RELATIONS'
@@ -67,10 +67,7 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
       }
       chrome.cookies.set(setDetails, function (cookie) {
         if (!cookie) {
-          console.group('SetCookie出错')
-          console.warn(chrome.runtime.lastError?.message)
-          console.log('setDetails: ', setDetails)
-          console.groupEnd()
+          logLastError('SetCookie出错', () => console.log('setDetails: \n', setDetails))
         }
       })
     })
