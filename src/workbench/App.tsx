@@ -1,6 +1,6 @@
 import './App.scss'
-import React, { useState } from 'react'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import SyncCookie from './views/sync-cookie'
 import DisguiseRequest from './views/disguise-request'
@@ -22,6 +22,13 @@ const App: React.FC = () => {
     }
   ]
   const [current, setCurrent] = useState('/syncCookie')
+  const location = useLocation()
+
+  // TODO optimize
+  useEffect(() => {
+    setCurrent(location.pathname)
+  }, [location])
+
   const navigate = useNavigate()
   const clickMenu: MenuProps['onClick'] = (e) => {
     setCurrent(e.key)

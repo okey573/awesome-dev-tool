@@ -2,8 +2,8 @@ import { EVENT_DISGUISE_REQUEST } from '@/constants.ts'
 
 console.log('disguise-request')
 chrome.webRequest.onBeforeRequest.addListener(function (info) {
-    console.log('onBeforeRequest')
-    console.log(info)
+    // console.log('onBeforeRequest')
+    // console.log(info)
     return {}
   },
   { urls: ['<all_urls>'] },
