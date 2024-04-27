@@ -15,3 +15,13 @@ namespace SyncCookie {
     data: SyncCookie.Relation[]
   }
 }
+
+namespace DisguiseRequest {
+
+  type DisguiseRequestEventKey = 'EVENT_DISGUISE_REQUEST'
+
+  interface DisguiseRequestMessage {
+    event: DisguiseRequestEventKey,
+    data: any
+  }
+}

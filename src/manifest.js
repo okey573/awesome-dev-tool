@@ -16,7 +16,9 @@ export default {
   permissions: [
     'storage',
     'cookies',
-    'tabs'
+    'tabs',
+    'webRequest',
+    'webRequestBlocking',
   ],
   host_permissions: [
     '<all_urls>'
