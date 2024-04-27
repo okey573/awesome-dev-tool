@@ -8,11 +8,10 @@ namespace SyncCookie {
 
   type StorageKey = 'SYNC_COOKIE_RELATIONS'
 
-}
+  type SyncCookieEventKey = 'EVENT_SYNC_COOKIE'
 
-type EventSyncCookie = 'SYNC_COOKIE'
-
-interface SyncCookieMessage {
-  event: EVENT_SYNC_COOKIE,
-  data: SyncCookie.Relation[]
+  interface SyncCookieMessage {
+    event: SyncCookieEventKey,
+    data: SyncCookie.Relation[]
+  }
 }

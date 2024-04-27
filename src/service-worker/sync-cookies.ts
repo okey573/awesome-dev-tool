@@ -1,4 +1,5 @@
 import { getHost, logLastError, removeFistDotHost } from '@/util.ts'
+import { EVENT_SYNC_COOKIE } from '@/constants.ts'
 
 console.log('sync-cookies')
 const StorageKey: SyncCookie.StorageKey = 'SYNC_COOKIE_RELATIONS'
@@ -148,9 +149,8 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
   console.groupEnd()
 }
 
-chrome.runtime.onMessage.addListener(async (message: SyncCookieMessage) => {
-  const EVENT: EventSyncCookie = 'SYNC_COOKIE'
-  if (message.event !== EVENT) return
+chrome.runtime.onMessage.addListener(async (message: SyncCookie.SyncCookieMessage) => {
+  if (message.event !== EVENT_SYNC_COOKIE) return
   console.groupCollapsed('接受到同步 cookies 消息 at ', new Date().toLocaleString())
 
   await syncCookie(message.data)

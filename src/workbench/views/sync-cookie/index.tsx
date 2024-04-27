@@ -3,11 +3,11 @@ import RelationAdder from './RelationAdder.tsx'
 import React, { Suspense, useState } from 'react'
 import { useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
-import useSuspensePromise from '../../../hooks/useSuspensePromise.ts'
+import useSuspensePromise from '@/hooks/useSuspensePromise.ts'
+import { EVENT_SYNC_COOKIE } from '@/constants.ts'
+
 
 const STORAGE_KEY: SyncCookie.StorageKey = 'SYNC_COOKIE_RELATIONS'
-const EVENT: EventSyncCookie = 'SYNC_COOKIE'
-
 
 const promise = chrome.storage.local.get(STORAGE_KEY)
 
@@ -20,7 +20,7 @@ const SyncCookie: React.FC = (() => {
       [STORAGE_KEY]: relations
     })
     chrome.runtime.sendMessage({
-      event: EVENT,
+      event: EVENT_SYNC_COOKIE,
       data: relations
     })
   }, [relations])

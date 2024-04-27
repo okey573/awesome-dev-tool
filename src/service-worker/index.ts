@@ -1,4 +1,5 @@
 import './sync-cookies'
+import './disguise-request'
 
 chrome.action.onClicked.addListener(async function () {
   const url = chrome.runtime.getURL('workbench.html')
