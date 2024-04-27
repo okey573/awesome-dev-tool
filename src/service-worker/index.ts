@@ -1,7 +1,16 @@
 import './sync-cookies'
 
-chrome.action.onClicked.addListener(function () {
+chrome.action.onClicked.addListener(async function () {
   const url = chrome.runtime.getURL('workbench.html')
-  // TODO 优化：判断如果已存在打开的tab页，则不再重复打开而是定位到已打开的tab页
-  chrome.tabs.create({ url })
+  const windows = await chrome.windows.getAll({ populate: true })
+  for (const window of windows) {
+    const tabs = window.tabs || []
+    for (const tab of tabs) {
+      if (tab.url?.startsWith(url) && window.focused) {
+        await chrome.tabs.update(tab.id!, { active: true })
+        return
+      }
+    }
+  }
+  await chrome.tabs.create({ url })
 })
