@@ -78,7 +78,7 @@ const App: React.FC<{
         message.error(`当前列表中已存在[${fromHost}]到[${toHost}]的同步关系`)
         return
       }
-
+      // TODO 判断是否存在 A to B; B to C; C to A; 的情况，即允许不存在环，否则会导致监听 cookie 变化的函数陷入死循环
       const newData = [...relations]
       const index = newData.findIndex((item) => key === item.key)
       if (index > -1) {
