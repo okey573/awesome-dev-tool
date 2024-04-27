@@ -102,12 +102,6 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
     relations = initRelations || []
   }
   console.log(relations)
-  /**
-   * TODO:
-   * 目前只实现了新增时的同步，关闭或者删除不会删除已同步的 cookie
-   * 增加一个 lastSyncRelations
-   * 比较 relations 和 lastSyncRelations 根据对应的对比结果做出动作
-   */
   for (const relation of relations!) {
     const { from, to, open } = relation
     const fromHost = getHost(from)
