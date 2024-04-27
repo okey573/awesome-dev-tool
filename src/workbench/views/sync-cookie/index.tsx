@@ -31,6 +31,8 @@ const SyncCookie: React.FC = (() => {
   </>
 })
 
-export default () => <Suspense fallback={<Spin style={{ width: '100%', marginTop: '50px' }} />}>
+const App = () => <Suspense fallback={<Spin style={{ width: '100%', marginTop: '50px' }} />}>
   <SyncCookie />
 </Suspense>
+
+export default App

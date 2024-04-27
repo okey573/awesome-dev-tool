@@ -3,23 +3,27 @@ import React, { useState } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import SyncCookie from './views/sync-cookie'
-import TestPage from './views/test-page'
+import DisguiseRequest from './views/disguise-request'
+import GroupTabs from './views/group-tasbs'
 
 const App: React.FC = () => {
   const items: MenuProps['items'] = [
     {
-      label: 'cookie',
-      key: '/cookie',
+      label: '同步cookie',
+      key: '/syncCookie',
     },
     {
-      label: 'test',
-      key: '/test',
+      label: '伪装请求',
+      key: '/disguiseRequest',
     },
+    {
+      label: '标签页分组',
+      key: '/groupTabs',
+    }
   ]
-  const [current, setCurrent] = useState('/cookie')
+  const [current, setCurrent] = useState('/syncCookie')
   const navigate = useNavigate()
   const clickMenu: MenuProps['onClick'] = (e) => {
-    console.log('click ', e)
     setCurrent(e.key)
     navigate(e.key)
   }
@@ -33,9 +37,10 @@ const App: React.FC = () => {
     />
     <div className="content">
       <Routes>
-        <Route path="/" element={<Navigate to="/cookie" replace />} />
-        <Route path="/cookie" element={<SyncCookie />} />
-        <Route path="/test" element={<TestPage />} />
+        <Route path="/" element={<Navigate to="/syncCookie" replace />} />
+        <Route path="/syncCookie" element={<SyncCookie />} />
+        <Route path="/disguiseRequest" element={<DisguiseRequest />} />
+        <Route path="/groupTabs" element={<GroupTabs />} />
       </Routes>
     </div>
   </ConfigProvider>

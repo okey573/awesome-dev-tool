@@ -5,7 +5,7 @@ import Relation = SyncCookie.Relation
 import { getHost } from '@/util.ts'
 
 
-const App: React.FC<{
+const RelationAdder: React.FC<{
   relations: Relation[],
   setRelations: (nr: Relation[]) => void
 }> = ({
@@ -67,4 +67,4 @@ const App: React.FC<{
   </Form>
 }
 
-export default App
+export default RelationAdder

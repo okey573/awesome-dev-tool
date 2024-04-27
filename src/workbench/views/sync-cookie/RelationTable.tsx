@@ -44,7 +44,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const App: React.FC<{
+const RelationTable: React.FC<{
   relations: Relation[],
   setRelations: (nr: Relation[]) => void
 }> = ({
@@ -198,4 +198,4 @@ const App: React.FC<{
   )
 }
 
-export default App
+export default RelationTable

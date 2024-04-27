@@ -169,7 +169,7 @@ chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   if (!affectedRelations.length) return
 
   console.groupCollapsed(`监听到 cookie 发生变化: cause = ${cause}, removed = ${removed}, name = ${cookie.name}, domain = ${cookie.domain}, value = ${cookie.value}`)
-  console.log({ cause, cookie, removed, affectedRelations })
+  console.table({ cause, cookie, removed, affectedRelations })
 
   if (cause === 'overwrite') {
     console.log('cause = overwrite , 此次无需处理')
