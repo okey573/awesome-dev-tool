@@ -1,7 +1,8 @@
 import React from 'react'
 import type { FormProps } from 'antd'
-import { Button, Form, Input, Space } from 'antd'
+import { Button, Form, Input, message, Space } from 'antd'
 import Relation = SyncCookie.Relation
+import { getHost } from '@/util.ts'
 
 
 const App: React.FC<{
@@ -12,6 +13,12 @@ const App: React.FC<{
         setRelations
       }) => {
   const onFinish: FormProps<Relation>['onFinish'] = (values) => {
+    const fromHost = getHost(values.from)
+    const toHost = getHost(values.to)
+    if (relations.some(item => getHost(item.to) == toHost && getHost(item.from) == fromHost)) {
+      message.error(`当前列表中已存在[${fromHost}]到[${toHost}]的同步关系`)
+      return
+    }
     setRelations([
       ...relations,
       {
@@ -53,14 +60,6 @@ const App: React.FC<{
       <Space>
         <Button type="primary" htmlType="submit">
           添加
-        </Button>
-        <Button type="primary" onClick={
-          async () => {
-            console.log(relations)
-            console.log(await chrome.storage.local.get('SYNC_COOKIE_RELATIONS'))
-          }
-        }>
-          log
         </Button>
       </Space>
     </Form.Item>

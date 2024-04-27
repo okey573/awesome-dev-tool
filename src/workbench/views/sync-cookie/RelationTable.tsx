@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import type { TableProps } from 'antd'
-import { Form, Input, Space, Switch, Table, Typography } from 'antd'
+import { Form, Input, message, Space, Switch, Table, Typography } from 'antd'
 import Relation = SyncCookie.Relation
+import { getHost } from '@/util.ts'
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -70,6 +71,13 @@ const App: React.FC<{
   const save = async (key: React.Key) => {
     try {
       const row = (await form.validateFields()) as Relation
+
+      const fromHost = getHost(row.from)
+      const toHost = getHost(row.to)
+      if (relations.some(item => getHost(item.to) == toHost && getHost(item.from) == fromHost)) {
+        message.error(`当前列表中已存在[${fromHost}]到[${toHost}]的同步关系`)
+        return
+      }
 
       const newData = [...relations]
       const index = newData.findIndex((item) => key === item.key)
