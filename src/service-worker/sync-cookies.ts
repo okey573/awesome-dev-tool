@@ -64,41 +64,39 @@ const getRemoveCookieDetails = (cookie: chrome.cookies.Cookie, to: string) => {
   return removeDetails
 }
 const copyCookies = async (from: string, to: string) => {
-  console.info(`copyCookies: from [${from}] to [${to}]`)
-  const cookies = await chrome.cookies.getAll({ domain: from })
-  console.log(`获取到${from}域下的cookies:\n`)
-  console.log(cookies)
+  console.groupCollapsed(`copyCookies: from [${from}] to [${to}] start`)
 
-  cookies.forEach((cookie) => {
+  const cookies = await chrome.cookies.getAll({ domain: from })
+  console.log(`获取到${from}域下的cookies:\n`, cookies)
+
+  for (const cookie of cookies) {
     const setDetails = getSetCookieDetails(cookie, to)
-    chrome.cookies.set(setDetails, function (cookie) {
-      if (!cookie) {
-        logLastError('SetCookie出错', () => console.log('setDetails: \n', setDetails))
-      }
-    })
-  })
+    const result = await chrome.cookies.set(setDetails)
+    !result && logLastError('SetCookie出错', () => console.log('setDetails: \n', setDetails))
+  }
+
+  console.log(`copyCookies: from [${from}] to [${to}] completed`)
+  console.groupEnd()
 }
 const removeCookies = async (from: string, to: string) => {
-  console.info(`removeCookies: from [${from}] to [${to}]`)
-
-  const toCookies = await chrome.cookies.getAll({ domain: to })
-  console.log(`获取到${to}域下的cookies:\n`)
-  console.log(toCookies)
+  console.groupCollapsed(`removeCookies: from [${from}] to [${to}] start`)
 
   const fromCookies = await chrome.cookies.getAll({ domain: from })
-  console.log(`获取到${from}域下的cookies:\n`)
-  console.log(fromCookies)
+  console.log(`获取到${from}域下的cookies:\n`, fromCookies)
 
-  toCookies.forEach((cookie) => {
+  const toCookies = await chrome.cookies.getAll({ domain: to })
+  console.log(`获取到${to}域下的cookies:\n`, toCookies)
+
+  for (const cookie of toCookies) {
     const removeDetails = getRemoveCookieDetails(cookie, to)
     if (fromCookies.some(c => c.name === cookie.name)) {
-      chrome.cookies.remove(removeDetails, function (cookie) {
-        if (!cookie) {
-          logLastError('RemoveCookie出错', () => console.log('setDetails: \n', removeDetails))
-        }
-      })
+      const result = await chrome.cookies.remove(removeDetails)
+      !result && logLastError('RemoveCookie出错', () => console.log('setDetails: \n', removeDetails))
     }
-  })
+  }
+
+  console.log(`removeCookies: from [${from}] to [${to}] completed`)
+  console.groupEnd()
 }
 
 const syncCookie = async (relations?: SyncCookie.Relation[]) => {
@@ -106,7 +104,9 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
     const { [StorageKey]: initRelations } = await chrome.storage.local.get(StorageKey)
     relations = initRelations || []
   }
-  console.log(relations)
+  console.groupCollapsed('开始同步 cookies')
+  console.log('当前同步关系如下:\n', relations)
+
   for (const relation of relations!) {
     const { from, to, open } = relation
     const fromHost = getHost(from)
@@ -115,7 +115,7 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
     const oldRelationIndex = lastSyncRelations.findIndex(item => getHost(item.from) === fromHost && getHost(item.to) === toHost)
     if (oldRelationIndex < 0) {
       // 场景1：之前没有这一对代表新增，执行copy
-      open && copyCookies(fromHost, toHost)
+      open && await copyCookies(fromHost, toHost)
       continue
     }
     const [oldRelation] = lastSyncRelations.splice(oldRelationIndex, 1)
@@ -126,9 +126,9 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
 
     // 场景3：修改了open状态，根据最新状态执行 copy or clear
     if (open) {
-      copyCookies(fromHost, toHost)
+      await copyCookies(fromHost, toHost)
     } else {
-      removeCookies(fromHost, toHost)
+      await removeCookies(fromHost, toHost)
     }
   }
 
@@ -139,17 +139,24 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
     const toHost = getHost(to)
     // 如果原本就没打开 则跳过
     if (!open) continue
-    removeCookies(fromHost, toHost)
+    await removeCookies(fromHost, toHost)
   }
 
   lastSyncRelations = JSON.parse(JSON.stringify(relations))
+
+  console.log('同步 cookies 完成')
+  console.groupEnd()
 }
 
-chrome.runtime.onMessage.addListener((message: SyncCookieMessage) => {
+chrome.runtime.onMessage.addListener(async (message: SyncCookieMessage) => {
   const EVENT: EventSyncCookie = 'SYNC_COOKIE'
   if (message.event !== EVENT) return
-  console.log('接受到同步cookie消息')
-  syncCookie(message.data)
+  console.groupCollapsed('接受到同步 cookies 消息 at ', new Date().toLocaleString())
+
+  await syncCookie(message.data)
+
+  console.log('消息处理完成')
+  console.groupEnd()
 })
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   const { [StorageKey]: storageRelations } = await chrome.storage.local.get(StorageKey)
@@ -157,30 +164,33 @@ chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   const affectedRelations: SyncCookie.Relation[] = relations.filter((relation: SyncCookie.Relation) => {
     const changedCookieDomain = removeFistDotHost(cookie.domain)!
     const relationFromDomain = removeFistDotHost(getHost(relation.from))!
-    return changedCookieDomain === relationFromDomain
+    return changedCookieDomain === relationFromDomain && relation.open
   })
   if (!affectedRelations.length) return
-  console.info('cookies change:')
-  console.log({ cause, cookie, removed })
-  console.log('affectedRelations', affectedRelations)
+
+  console.groupCollapsed(`监听到 cookie 发生变化: cause = ${cause}, removed = ${removed}, name = ${cookie.name}, domain = ${cookie.domain}, value = ${cookie.value}`)
+  console.log({ cause, cookie, removed, affectedRelations })
+
+  if (cause === 'overwrite') {
+    console.log('cause = overwrite , 此次无需处理')
+    console.groupEnd()
+    return
+  }
 
   for (const relation of affectedRelations) {
     if (removed) {
       const removeDetails = getRemoveCookieDetails(cookie, getHost(relation.to))
-      chrome.cookies.remove(removeDetails, function (cookie) {
-        if (!cookie) {
-          logLastError('RemoveCookie出错', () => console.log('setDetails: \n', removeDetails))
-        }
-      })
+      const result = await chrome.cookies.remove(removeDetails)
+      !result && logLastError('RemoveCookie出错', () => console.log('removeDetails: \n', removeDetails))
     } else {
       const setDetails = getSetCookieDetails(cookie, getHost(relation.to))
-      chrome.cookies.set(setDetails, function (cookie) {
-        if (!cookie) {
-          logLastError('SetCookie出错', () => console.log('setDetails: \n', setDetails))
-        }
-      })
+      const result = await chrome.cookies.set(setDetails)
+      !result && logLastError('SetCookie出错', () => console.log('setDetails: \n', setDetails))
     }
   }
+
+  console.log('cookie 变化事件处理完成')
+  console.groupEnd()
 })
 
 syncCookie()
