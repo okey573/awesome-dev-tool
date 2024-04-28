@@ -1,87 +1,52 @@
-import { Button, Divider, Form, Input, Typography } from 'antd'
-import { EVENT_DISGUISE_REQUEST } from '@/constants.ts'
+import RelationTable from './RelationTable.tsx'
+import RelationAdder from './RelationAdder.tsx'
+import RulesTester from './RulesTester.tsx'
+import React, { Suspense, useState } from 'react'
+import { useUpdateEffect } from 'ahooks'
+import { Divider, Spin } from 'antd'
+import useSuspensePromise from '@/hooks/useSuspensePromise.ts'
+// import { EVENT_DISGUISE_REQUEST, STORAGE_DISGUISE_REQUEST_RELATIONS } from '@/constants.ts'
 
-const App = () => {
+
+// const promise = chrome.storage.local.get(STORAGE_DISGUISE_REQUEST_RELATIONS)
+const promise = Promise.resolve([{
+  key: '1',
+  real: 'http://localhost:8080',
+  fake: 'https://baidu.com'
+}, {
+  key: '2',
+  real: 'http://localhost:8081',
+  fake: 'https://google.com'
+}] as DisguiseRequest.Relation[])
+
+
+const DisguiseRequest: React.FC = (() => {
+  // const { [STORAGE_DISGUISE_REQUEST_RELATIONS]: initRelations } = useSuspensePromise(promise)
+  const initRelations = useSuspensePromise(promise)
+  console.log('initRelations')
+  console.log(initRelations)
+  const [relations, setRelations] = useState<DisguiseRequest.Relation[]>(initRelations || [])
+
+  useUpdateEffect(() => {
+    // chrome.storage.local.set({
+    //   [STORAGE_DISGUISE_REQUEST_RELATIONS]: relations
+    // })
+    // chrome.runtime.sendMessage({
+    //   event: EVENT_DISGUISE_REQUEST,
+    //   data: relations
+    // })
+  }, [relations])
+
   return <>
-    <Typography.Title mark>
-      'webRequestBlocking' requires manifest version of 2 or lower
-    </Typography.Title>
-
-    <Typography.Text>
-      manifest v3 不支持 webRequestBlocking 了，所以不能直接拦截请求，要用
-      <Typography.Text strong> declarativeNetRequestWithHostAccess </Typography.Text>
-      实现
-    </Typography.Text>
-
-    <Divider />
-
-    <div>
-      <Button onClick={
-        async () => {
-          chrome.runtime.sendMessage({
-            event: EVENT_DISGUISE_REQUEST,
-            data: []
-          })
-
-          const rules = await chrome.declarativeNetRequest.getDynamicRules()
-          const rulesString = JSON.stringify(rules, null, 2)
-          const newWindow = window.open()
-          const preElement = newWindow!.document.createElement('pre')
-          preElement.style.fontSize = '1rem'
-          preElement.textContent = rulesString
-          newWindow!.document.body.appendChild(preElement)
-        }
-      }>
-        查看当前规则
-      </Button>
-    </div>
-
-    <Divider />
-
-    <Form
-      name="testMatchRules"
-      layout={'inline'}
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={
-        async ({ url, initiator }) => {
-          console.log({
-            url,
-            initiator
-          })
-          // @ts-ignore
-          const data = await chrome.declarativeNetRequest.testMatchOutcome({
-            url,
-            initiator,
-            type: 'xmlhttprequest' as const
-          })
-          console.log(data)
-        }
-      }
-      autoComplete="off"
-    >
-      <Form.Item
-        label="url"
-        name="url"
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="initiator"
-        name="initiator"
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          test
-        </Button>
-      </Form.Item>
-    </Form>
+    <RelationAdder relations={relations} setRelations={setRelations} />
+    <RelationTable relations={relations} setRelations={setRelations} />
   </>
-}
+})
+
+const App = () => <Suspense fallback={<Spin style={{ width: '100%', marginTop: '50px' }} />}>
+  <RulesTester />
+  <Divider />
+  <DisguiseRequest />
+</Suspense>
 
 export default App

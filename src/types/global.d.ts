@@ -6,7 +6,7 @@ namespace SyncCookie {
     open: boolean;
   }
 
-  type StorageKey = 'SYNC_COOKIE_RELATIONS'
+  type StorageKey = 'STORAGE_SYNC_COOKIE_RELATIONS'
 
   type SyncCookieEventKey = 'EVENT_SYNC_COOKIE'
 
@@ -23,6 +23,7 @@ namespace DisguiseRequest {
     fake: string;
     open: boolean;
   }
+  type StorageKey = 'STORAGE_DISGUISE_REQUEST_RELATIONS'
 
   type DisguiseRequestEventKey = 'EVENT_DISGUISE_REQUEST'
 

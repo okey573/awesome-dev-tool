@@ -1,7 +1,7 @@
 import React from 'react'
 import type { FormProps } from 'antd'
 import { Button, Form, Input, message, Space } from 'antd'
-import Relation = SyncCookie.Relation
+import Relation = DisguiseRequest.Relation
 import { getDomain } from '@/util.ts'
 
 
@@ -13,10 +13,10 @@ const RelationAdder: React.FC<{
         setRelations
       }) => {
   const onFinish: FormProps<Relation>['onFinish'] = (values) => {
-    const fromDomain = getDomain(values.from)
-    const toDomain = getDomain(values.to)
-    if (relations.some(item => getDomain(item.to) == toDomain && getDomain(item.from) == fromDomain)) {
-      message.error(`当前列表中已存在[${fromDomain}]到[${toDomain}]的同步关系`)
+    const realHost = getDomain(values.real)
+    const fakeHost = getDomain(values.fake)
+    if (relations.some(item => getDomain(item.real) == realHost && getDomain(item.fake) == fakeHost)) {
+      message.error(`当前列表中已存在[${realHost}]到[${fakeHost}]的同步关系`)
       return
     }
     // TODO 判断是否存在 A to B; B to C; C to A; 的情况，即允许不存在环，否则会导致监听 cookie 变化的函数陷入死循环
@@ -30,7 +30,7 @@ const RelationAdder: React.FC<{
     ])
   }
   return <Form
-    name="syncCookieRelationAdder"
+    name="disguiseRequestRelationAdder"
     labelCol={{ span: 8 }}
     wrapperCol={{ span: 16 }}
     style={{ width: '100%', justifyContent: 'center', margin: '20px 0' }}
@@ -40,19 +40,19 @@ const RelationAdder: React.FC<{
     layout={'inline'}
   >
     <Form.Item<Relation>
-      label="来源域"
-      name="from"
+      label="真实的请求发起域"
+      name="real"
       style={{ width: '30%' }}
-      rules={[{ required: true, message: '请输入来源域名' }]}
+      rules={[{ required: true, message: '请输入真实请求域名' }]}
     >
       <Input />
     </Form.Item>
 
     <Form.Item<Relation>
-      label="目标域"
-      name="to"
+      label="伪装的请求发起域"
+      name="fake"
       style={{ width: '30%' }}
-      rules={[{ required: true, message: '请输入目标域名' }]}
+      rules={[{ required: true, message: '请输入伪装域名' }]}
     >
       <Input />
     </Form.Item>
