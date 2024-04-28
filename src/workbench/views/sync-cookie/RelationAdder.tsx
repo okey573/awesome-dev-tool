@@ -2,7 +2,7 @@ import React from 'react'
 import type { FormProps } from 'antd'
 import { Button, Form, Input, message, Space } from 'antd'
 import Relation = SyncCookie.Relation
-import { getHost } from '@/util.ts'
+import { getDomain } from '@/util.ts'
 
 
 const RelationAdder: React.FC<{
@@ -13,10 +13,10 @@ const RelationAdder: React.FC<{
         setRelations
       }) => {
   const onFinish: FormProps<Relation>['onFinish'] = (values) => {
-    const fromHost = getHost(values.from)
-    const toHost = getHost(values.to)
-    if (relations.some(item => getHost(item.to) == toHost && getHost(item.from) == fromHost)) {
-      message.error(`当前列表中已存在[${fromHost}]到[${toHost}]的同步关系`)
+    const fromDomain = getDomain(values.from)
+    const toDomain = getDomain(values.to)
+    if (relations.some(item => getDomain(item.to) == toDomain && getDomain(item.from) == fromDomain)) {
+      message.error(`当前列表中已存在[${fromDomain}]到[${toDomain}]的同步关系`)
       return
     }
     // TODO 判断是否存在 A to B; B to C; C to A; 的情况，即允许不存在环，否则会导致监听 cookie 变化的函数陷入死循环

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { TableProps } from 'antd'
 import { Form, Input, message, Space, Switch, Table, Typography } from 'antd'
 import Relation = SyncCookie.Relation
-import { getHost } from '@/util.ts'
+import { getDomain } from '@/util.ts'
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -72,10 +72,10 @@ const RelationTable: React.FC<{
     try {
       const row = (await form.validateFields()) as Relation
 
-      const fromHost = getHost(row.from)
-      const toHost = getHost(row.to)
-      if (relations.some(item => getHost(item.to) == toHost && getHost(item.from) == fromHost)) {
-        message.error(`当前列表中已存在[${fromHost}]到[${toHost}]的同步关系`)
+      const fromDomain = getDomain(row.from)
+      const toDomain = getDomain(row.to)
+      if (relations.some(item => getDomain(item.to) == toDomain && getDomain(item.from) == fromDomain)) {
+        message.error(`当前列表中已存在[${fromDomain}]到[${toDomain}]的同步关系`)
         return
       }
       // TODO 判断是否存在 A to B; B to C; C to A; 的情况，即允许不存在环，否则会导致监听 cookie 变化的函数陷入死循环

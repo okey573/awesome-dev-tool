@@ -5,6 +5,15 @@ export const getHost = (s: string) => {
   return new URL('http://' + s).host
 }
 
+export const getHostname = (s: string) => {
+  if (s.startsWith('https://') || s.startsWith('http://')) {
+    return new URL(s).hostname
+  }
+  return new URL('http://' + s).hostname
+}
+
+export const getDomain = getHostname
+
 export const removeFistDotHost = (s: string) => {
   const matchResult = s.match(/^\.(.+$)/)
   if (matchResult === null) {
@@ -14,13 +23,9 @@ export const removeFistDotHost = (s: string) => {
   }
 }
 
-export const logLastError = (message: string, additionalLogger: () => void) => {
-  console.group(message)
-  console.warn(chrome.runtime.lastError)
-  additionalLogger?.()
-  console.groupEnd()
-}
-
 export default {
-  getHost
+  getHost,
+  getHostname,
+  getDomain,
+  removeFistDotHost
 }
