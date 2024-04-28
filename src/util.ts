@@ -16,7 +16,7 @@ export const removeFistDotHost = (s: string) => {
 
 export const logLastError = (message: string, additionalLogger: () => void) => {
   console.group(message)
-  console.error(chrome.runtime.lastError?.message)
+  console.warn(chrome.runtime.lastError)
   additionalLogger?.()
   console.groupEnd()
 }
