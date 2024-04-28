@@ -7,6 +7,7 @@ export default {
   name: packageJson.name,
   description: packageJson.description,
   version: packageJson.version,
+  minimum_chrome_version: '103',
   icons: {
     16: 'images/16.png',
     32: 'images/32.png',
