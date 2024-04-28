@@ -1,8 +1,7 @@
 import { getDomain, removeFistDotHost } from '@/util.ts'
-import { EVENT_SYNC_COOKIE } from '@/constants.ts'
+import { EVENT_SYNC_COOKIE, STORAGE_SYNC_COOKIE_RELATIONS } from '@/constants.ts'
 
 console.log('sync-cookies')
-const StorageKey: SyncCookie.StorageKey = 'SYNC_COOKIE_RELATIONS'
 
 let lastSyncRelations: SyncCookie.Relation[] = []
 
@@ -111,7 +110,7 @@ const removeCookies = async (from: string, to: string) => {
 
 const syncCookie = async (relations?: SyncCookie.Relation[]) => {
   if (!relations) {
-    const { [StorageKey]: initRelations } = await chrome.storage.local.get(StorageKey)
+    const { [STORAGE_SYNC_COOKIE_RELATIONS]: initRelations } = await chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
     relations = initRelations || []
   }
   console.groupCollapsed('开始同步 cookies')
@@ -168,7 +167,7 @@ chrome.runtime.onMessage.addListener(async (message: SyncCookie.SyncCookieMessag
   console.groupEnd()
 })
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
-  const { [StorageKey]: storageRelations } = await chrome.storage.local.get(StorageKey)
+  const { [STORAGE_SYNC_COOKIE_RELATIONS]: storageRelations } = await chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
   const relations = storageRelations || [] as SyncCookie.Relation[]
   const affectedRelations: SyncCookie.Relation[] = relations.filter((relation: SyncCookie.Relation) => {
     const changedCookieDomain = removeFistDotHost(cookie.domain)!

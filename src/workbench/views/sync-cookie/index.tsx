@@ -4,20 +4,18 @@ import React, { Suspense, useState } from 'react'
 import { useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import useSuspensePromise from '@/hooks/useSuspensePromise.ts'
-import { EVENT_SYNC_COOKIE } from '@/constants.ts'
+import { EVENT_SYNC_COOKIE, STORAGE_SYNC_COOKIE_RELATIONS } from '@/constants.ts'
 
 
-const STORAGE_KEY: SyncCookie.StorageKey = 'SYNC_COOKIE_RELATIONS'
-
-const promise = chrome.storage.local.get(STORAGE_KEY)
+const promise = chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
 
 const SyncCookie: React.FC = (() => {
-  const { [STORAGE_KEY]: initRelations } = useSuspensePromise(promise)
+  const { [STORAGE_SYNC_COOKIE_RELATIONS]: initRelations } = useSuspensePromise(promise)
   const [relations, setRelations] = useState<SyncCookie.Relation[]>(initRelations || [])
 
   useUpdateEffect(() => {
     chrome.storage.local.set({
-      [STORAGE_KEY]: relations
+      [STORAGE_SYNC_COOKIE_RELATIONS]: relations
     })
     chrome.runtime.sendMessage({
       event: EVENT_SYNC_COOKIE,
