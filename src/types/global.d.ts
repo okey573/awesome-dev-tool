@@ -17,6 +17,12 @@ namespace SyncCookie {
 }
 
 namespace DisguiseRequest {
+  interface Relation {
+    key: string;
+    real: string;
+    fake: string;
+    open: boolean;
+  }
 
   type DisguiseRequestEventKey = 'EVENT_DISGUISE_REQUEST'
 
