@@ -2,7 +2,7 @@ import React from 'react'
 import type { FormProps } from 'antd'
 import { Button, Form, Input, message, Space } from 'antd'
 import Relation = SyncCookie.Relation
-import { getDomain } from '@/util.ts'
+import { getDomain } from '@/utils/index.ts'
 
 
 const RelationAdder: React.FC<{

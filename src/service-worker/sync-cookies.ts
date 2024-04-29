@@ -1,4 +1,4 @@
-import { getDomain, removeFistDotHost } from '@/util.ts'
+import { getDomain, removeFistDotHost } from '@/utils/index.ts'
 import { EVENT_SYNC_COOKIE, STORAGE_SYNC_COOKIE_RELATIONS } from '@/constants.ts'
 
 console.log('sync-cookies')

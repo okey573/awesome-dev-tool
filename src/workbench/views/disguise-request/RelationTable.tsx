@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { TableProps } from 'antd'
 import { Form, Input, message, Space, Switch, Table, Typography } from 'antd'
 import Relation = DisguiseRequest.Relation
-import { getDomain } from '@/util.ts'
+import { getDomain } from '@/utils/index.ts'
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
