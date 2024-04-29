@@ -1,5 +1,6 @@
 import { getDomain, removeFistDotHost } from '@/utils/index.ts'
 import { EVENT_SYNC_COOKIE, STORAGE_SYNC_COOKIE_RELATIONS } from '@/constants.ts'
+import { StyledConsole } from '@/utils/styled-console.ts'
 
 console.log('sync-cookies')
 
@@ -65,46 +66,45 @@ const getRemoveCookieDetails = (cookie: chrome.cookies.Cookie, to: string) => {
   return removeDetails
 }
 const copyCookies = async (from: string, to: string) => {
-  console.groupCollapsed(`copyCookies: from [${from}] to [${to}] start`)
+  console.groupCollapsed(`copyCookies: from %c${from} %cto %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
 
   const cookies = await chrome.cookies.getAll({ domain: from })
-  console.log(`获取到${from}域下的cookies:\n`, cookies)
+  console.log(`%c${from}: `, StyledConsole.COLOR_PRIMARY, cookies)
 
   for (const cookie of cookies) {
     const setDetails = getSetCookieDetails(cookie, to)
     try {
       const result = await chrome.cookies.set(setDetails)
       if (result === null) throw chrome.runtime.lastError
+      console.log(`%cSetCookie成功: %cname=${setDetails.name};%cvalue=${setDetails.value};`, StyledConsole.COLOR_SUCCESS, StyledConsole.COLOR_INFO, StyledConsole.COLOR_INFO)
     } catch (e) {
-      console.warn('SetCookie出错')
+      console.warn('%cSetCookie出错', StyledConsole.COLOR_ERROR)
       console.table([e, setDetails])
     }
   }
 
-  console.log(`copyCookies: from [${from}] to [${to}] completed`)
   console.groupEnd()
 }
 const removeCookies = async (from: string, to: string) => {
-  console.groupCollapsed(`removeCookies: from [${from}] to [${to}] start`)
+  console.groupCollapsed(`removeCookies: from %c${from} %cto %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
 
   const fromCookies = await chrome.cookies.getAll({ domain: from })
-  console.log(`获取到${from}域下的cookies:\n`, fromCookies)
+  console.log(`%c${from}: `, StyledConsole.COLOR_PRIMARY, fromCookies)
 
   const toCookies = await chrome.cookies.getAll({ domain: to })
-  console.log(`获取到${to}域下的cookies:\n`, toCookies)
+  console.log(`%c${to}: `, StyledConsole.COLOR_PRIMARY, toCookies)
 
   for (const cookie of toCookies) {
     const removeDetails = getRemoveCookieDetails(cookie, to)
     try {
       const result = await chrome.cookies.remove(removeDetails)
       if (result === null) throw chrome.runtime.lastError
+      console.log(`%cRemoveCookie出错: %cname=${removeDetails.name};`, StyledConsole.COLOR_SUCCESS, StyledConsole.COLOR_INFO)
     } catch (e) {
-      console.warn('RemoveCookie出错')
+      console.warn('%cRemoveCookie出错', StyledConsole.COLOR_ERROR)
       console.table([e, removeDetails])
     }
   }
-
-  console.log(`removeCookies: from [${from}] to [${to}] completed`)
   console.groupEnd()
 }
 
@@ -113,8 +113,9 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
     const { [STORAGE_SYNC_COOKIE_RELATIONS]: initRelations } = await chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
     relations = initRelations || []
   }
-  console.groupCollapsed('开始同步 cookies')
-  console.log('当前同步关系如下:\n', relations)
+  console.groupCollapsed(`sync-cookies %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_TEXT)
+  console.log('%c relations        :', StyledConsole.COLOR_BLUE_1, JSON.parse(JSON.stringify(relations)))
+  console.log('%c lastSyncRelations:', StyledConsole.COLOR_BLUE_2, JSON.parse(JSON.stringify(lastSyncRelations)))
 
   for (const relation of relations!) {
     const { from, to, open } = relation
@@ -153,17 +154,15 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
 
   lastSyncRelations = JSON.parse(JSON.stringify(relations))
 
-  console.log('同步 cookies 完成')
   console.groupEnd()
 }
 
 chrome.runtime.onMessage.addListener(async (message: SyncCookie.SyncCookieMessage) => {
   if (message.event !== EVENT_SYNC_COOKIE) return
-  console.groupCollapsed('接受到同步 cookies 消息 at ', new Date().toLocaleString())
+  console.groupCollapsed(`listened event %c sync-cookies %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_PRIMARY, StyledConsole.COLOR_TEXT)
 
   await syncCookie(message.data)
 
-  console.log('消息处理完成')
   console.groupEnd()
 })
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
