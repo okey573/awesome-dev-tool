@@ -101,7 +101,7 @@ const removeCookies = async (from: string, to: string) => {
     try {
       const result = await chrome.cookies.remove(removeDetails)
       if (result === null) throw chrome.runtime.lastError
-      console.log(`%cRemoveCookie出错: %cname=${removeDetails.name};`, StyledConsole.COLOR_SUCCESS, StyledConsole.COLOR_INFO)
+      console.log(`%cRemoveCookie成功: %cname=${removeDetails.name};`, StyledConsole.COLOR_SUCCESS, StyledConsole.COLOR_INFO)
     } catch (e) {
       console.warn('%cRemoveCookie出错', StyledConsole.COLOR_ERROR)
       console.table([e, removeDetails])
