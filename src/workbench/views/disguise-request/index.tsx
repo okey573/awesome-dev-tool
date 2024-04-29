@@ -23,8 +23,6 @@ const promise = Promise.resolve([{
 const DisguiseRequest: React.FC = (() => {
   // const { [STORAGE_DISGUISE_REQUEST_RELATIONS]: initRelations } = useSuspensePromise(promise)
   const initRelations = useSuspensePromise(promise)
-  console.log('initRelations')
-  console.log(initRelations)
   const [relations, setRelations] = useState<DisguiseRequest.Relation[]>(initRelations || [])
 
   useUpdateEffect(() => {

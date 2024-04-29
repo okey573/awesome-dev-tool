@@ -1,9 +1,11 @@
 import { getDomain, removeFistDotHost } from '@/utils/index.ts'
-import { EVENT_SYNC_COOKIE, STORAGE_SYNC_COOKIE_RELATIONS } from '@/constants.ts'
 import { StyledConsole } from '@/utils/styled-console.ts'
+import { RUN_TIME_EVENT, STORAGE_KEY } from '@/enums.ts'
 
 console.log('sync-cookies')
 
+const storageKey = STORAGE_KEY.SYNC_COOKIE_RELATIONS
+const eventKey = RUN_TIME_EVENT.SYNC_COOKIE
 let lastSyncRelations: SyncCookie.Relation[] = []
 
 
@@ -110,7 +112,7 @@ const removeCookies = async (from: string, to: string) => {
 
 const syncCookie = async (relations?: SyncCookie.Relation[]) => {
   if (!relations) {
-    const { [STORAGE_SYNC_COOKIE_RELATIONS]: initRelations } = await chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
+    const { [storageKey]: initRelations } = await chrome.storage.local.get(storageKey)
     relations = initRelations || []
   }
   console.groupCollapsed(`sync-cookies %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_TEXT)
@@ -157,8 +159,8 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
   console.groupEnd()
 }
 
-chrome.runtime.onMessage.addListener(async (message: SyncCookie.SyncCookieMessage) => {
-  if (message.event !== EVENT_SYNC_COOKIE) return
+chrome.runtime.onMessage.addListener(async (message: RuntimeMessage) => {
+  if (message.event !== eventKey) return
   console.groupCollapsed(`listened event %c sync-cookies %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_PRIMARY, StyledConsole.COLOR_TEXT)
 
   await syncCookie(message.data)
@@ -166,7 +168,7 @@ chrome.runtime.onMessage.addListener(async (message: SyncCookie.SyncCookieMessag
   console.groupEnd()
 })
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
-  const { [STORAGE_SYNC_COOKIE_RELATIONS]: storageRelations } = await chrome.storage.local.get(STORAGE_SYNC_COOKIE_RELATIONS)
+  const { [storageKey]: storageRelations } = await chrome.storage.local.get(storageKey)
   const relations = storageRelations || [] as SyncCookie.Relation[]
   const affectedRelations: SyncCookie.Relation[] = relations.filter((relation: SyncCookie.Relation) => {
     const changedCookieDomain = removeFistDotHost(cookie.domain)!

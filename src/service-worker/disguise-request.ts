@@ -1,13 +1,14 @@
-import { EVENT_DISGUISE_REQUEST } from '@/constants.ts'
-
+import { RUN_TIME_EVENT } from '@/enums.ts'
 console.log('disguise-request')
 
+// const storageKey = STORAGE_KEY.DISGUISE_REQUEST_RELATIONS
+const eventKey = RUN_TIME_EVENT.DISGUISE_REQUEST
 // const relations: DisguiseRequest.Relation = [{
 //   real: 'locahost',
 //   fake: 'http://sys-admin.vip.vip.com'
 // }]
-chrome.runtime.onMessage.addListener(async (message: DisguiseRequest.DisguiseRequestMessage) => {
-  if (message.event !== EVENT_DISGUISE_REQUEST) return
+chrome.runtime.onMessage.addListener(async (message: RuntimeMessage) => {
+  if (message.event !== eventKey) return
   console.log('接受到消息')
 })
 
