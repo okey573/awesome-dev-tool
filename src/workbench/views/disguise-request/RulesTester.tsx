@@ -10,11 +10,11 @@ const RulesTester: React.FC = () => {
       initiator
     })
     // @ts-ignore
-    // const data = await chrome.declarativeNetRequest.testMatchOutcome({
-    //   url,
-    //   initiator,
-    //   type: 'xmlhttprequest' as const
-    // })
+    const data = await chrome.declarativeNetRequest.testMatchOutcome({
+      url,
+      initiator,
+      type: 'xmlhttprequest' as const
+    })
     console.log(data)
   }
 

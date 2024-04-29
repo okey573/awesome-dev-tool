@@ -17,5 +17,13 @@
 
 ## 规划
 
-- [ ] 实现伪装 request 解决跨域和认证问题
+- [ ] 实现伪装 request 解决跨域和验签的问题
 - [ ] 实现拦截 request 返回 mock 数据
+
+## 问题
+
+manifest v3 不支持 webRequestBlocking 了，所以不能直接拦截请求，要用 declarativeNetRequest api 代替
+
+但是目前这个 api 无法区分来自不同 origin 的请求
+
+导致的问题就是，如果存在关系： `localhost:8081` 伪装到 `a.com`, `localhost:8082` 伪装到 `b.com`。 那么 `localhost:8081` 和 `localhost:8082` 会匹配到相同的规则，做相同的处理
