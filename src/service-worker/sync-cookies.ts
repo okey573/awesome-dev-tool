@@ -2,8 +2,6 @@ import { getDomain, removeFistDotHost } from '@/utils/index.ts'
 import { StyledConsole } from '@/utils/styled-console.ts'
 import { RUN_TIME_EVENT, STORAGE_KEY } from '@/enums.ts'
 
-console.log('sync-cookies')
-
 const storageKey = STORAGE_KEY.SYNC_COOKIE_RELATIONS
 const eventKey = RUN_TIME_EVENT.SYNC_COOKIE
 let lastSyncRelations: SyncCookie.Relation[] = []
@@ -213,3 +211,5 @@ chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
 })
 
 syncCookie()
+
+console.log('script %csync-cookies', StyledConsole.COLOR_PRIMARY + StyledConsole.FONT_BOLD, 'loaded')

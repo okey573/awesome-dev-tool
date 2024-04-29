@@ -1,5 +1,5 @@
 import { RUN_TIME_EVENT } from '@/enums.ts'
-console.log('disguise-request')
+import { StyledConsole } from '@/utils/styled-console.ts'
 
 // const storageKey = STORAGE_KEY.DISGUISE_REQUEST_RELATIONS
 const eventKey = RUN_TIME_EVENT.DISGUISE_REQUEST
@@ -39,3 +39,5 @@ chrome.runtime.onInstalled.addListener(async function () {
     ]
   })
 })
+
+console.log('script %cdisguise-request', StyledConsole.COLOR_PRIMARY + StyledConsole.FONT_BOLD, 'loaded')

@@ -11,4 +11,5 @@ export enum StyledConsole {
   COLOR_BLUE_4 = 'color: #c6e2ff;',
   COLOR_BLUE_5 = 'color: #d9ecff;',
   COLOR_BLUE_6 = 'color: #ecf5ff;',
+  FONT_BOLD = 'font-weight: 700;'
 }
