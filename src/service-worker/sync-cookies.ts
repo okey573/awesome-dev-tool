@@ -68,7 +68,7 @@ const getRemoveCookieDetails = (cookie: chrome.cookies.Cookie, to: string) => {
   return removeDetails
 }
 const copyCookies = async (from: string, to: string) => {
-  console.groupCollapsed(`copyCookies: from %c${from} %cto %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
+  console.groupCollapsed(`copyCookies: %c${from} %c-> %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
 
   const cookies = await chrome.cookies.getAll({ domain: from })
   console.log(`%c${from}: `, StyledConsole.COLOR_PRIMARY, cookies)
@@ -88,7 +88,7 @@ const copyCookies = async (from: string, to: string) => {
   console.groupEnd()
 }
 const removeCookies = async (from: string, to: string) => {
-  console.groupCollapsed(`removeCookies: from %c${from} %cto %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
+  console.groupCollapsed(`removeCookies: %c${from} %c-> %c${to}`, StyledConsole.COLOR_INFO, StyledConsole.COLOR_TEXT, StyledConsole.COLOR_INFO)
 
   const fromCookies = await chrome.cookies.getAll({ domain: from })
   console.log(`%c${from}: `, StyledConsole.COLOR_PRIMARY, fromCookies)
