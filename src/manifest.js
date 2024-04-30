@@ -18,6 +18,7 @@ export default {
     'storage',
     'cookies',
     'tabs',
+    'tabGroups',
     'declarativeNetRequest',
     'declarativeNetRequestWithHostAccess'
   ],

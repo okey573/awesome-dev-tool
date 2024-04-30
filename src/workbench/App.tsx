@@ -2,8 +2,8 @@ import './App.scss'
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { ConfigProvider, Menu, MenuProps } from 'antd'
-import SyncCookie from './views/sync-cookie'
-import DisguiseRequest from './views/disguise-request'
+// import SyncCookie from './views/sync-cookie'
+// import DisguiseRequest from './views/disguise-request'
 import GroupTabs from './views/group-tasbs'
 
 const App: React.FC = () => {
@@ -21,7 +21,7 @@ const App: React.FC = () => {
       key: '/groupTabs',
     }
   ]
-  const [current, setCurrent] = useState('/syncCookie')
+  const [current, setCurrent] = useState('/groupTabs')
   const location = useLocation()
 
   // TODO optimize
@@ -44,9 +44,9 @@ const App: React.FC = () => {
     />
     <div className="content">
       <Routes>
-        <Route path="/" element={<Navigate to="/syncCookie" replace />} />
-        <Route path="/syncCookie" element={<SyncCookie />} />
-        <Route path="/disguiseRequest" element={<DisguiseRequest />} />
+        <Route path="/" element={<Navigate to="/groupTabs" replace />} />
+        {/*<Route path="/syncCookie" element={<SyncCookie />} />*/}
+        {/*<Route path="/disguiseRequest" element={<DisguiseRequest />} />*/}
         <Route path="/groupTabs" element={<GroupTabs />} />
       </Routes>
     </div>
