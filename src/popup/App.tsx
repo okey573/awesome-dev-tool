@@ -15,7 +15,7 @@ function App() {
               style={{ borderRadius: '0' }}
               icon={<UngroupOutlined />}
               onClick={changeGroupedTabs}>
-        一键（取消）分组标签页
+        分组（取消）标签页
       </Button>
 
       <Button block
