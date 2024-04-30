@@ -18,10 +18,16 @@ export const registerEvent = function (event: RUN_TIME_EVENT, handler: RuntimeMe
   console.log(`registered event: %c${event} %c@ ${new Date().toLocaleString()}`, StyledConsole.COLOR_PRIMARY, StyledConsole.COLOR_TEXT)
 }
 
-export const listenEvent = function (message: RuntimeMessage) {
+export const listenEvent = async function (message: RuntimeMessage) {
+  console.groupCollapsed(`listened event %c ${message.event} %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_PRIMARY, StyledConsole.COLOR_TEXT)
+
   const ev: RUN_TIME_EVENT = message.event
   const events: RuntimeMessageHandler[] = MessageCenter[ev]
-  events.forEach((event: RuntimeMessageHandler) => event(message))
+  for (const event of events) {
+    await event(message)
+  }
+
+  console.groupEnd()
 }
 
 export const emitEvent = function (message: RuntimeMessage | RUN_TIME_EVENT) {

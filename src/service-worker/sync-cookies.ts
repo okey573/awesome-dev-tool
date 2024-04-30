@@ -1,9 +1,9 @@
 import { getDomain, removeFistDotHost } from '@/utils/index.ts'
 import { StyledConsole } from '@/utils/styled-console.ts'
 import { RUN_TIME_EVENT, STORAGE_KEY } from '@/enums.ts'
+import { registerEvent } from '@/service-worker/runtime-message-center.ts'
 
 const storageKey = STORAGE_KEY.SYNC_COOKIE_RELATIONS
-const eventKey = RUN_TIME_EVENT.SYNC_COOKIE
 let lastSyncRelations: SyncCookie.Relation[] = []
 
 
@@ -107,8 +107,7 @@ const removeCookies = async (from: string, to: string) => {
   }
   console.groupEnd()
 }
-
-const syncCookie = async (relations?: SyncCookie.Relation[]) => {
+const doSyncCookie = async (relations?: SyncCookie.Relation[]) => {
   if (!relations) {
     const { [storageKey]: initRelations } = await chrome.storage.local.get(storageKey)
     relations = initRelations || []
@@ -156,14 +155,12 @@ const syncCookie = async (relations?: SyncCookie.Relation[]) => {
 
   console.groupEnd()
 }
+const syncCookie = async(message: RuntimeMessage) => {
+  await doSyncCookie(message.data)
+}
 
-chrome.runtime.onMessage.addListener(async (message: RuntimeMessage) => {
-  if (message.event !== eventKey) return
-  console.groupCollapsed(`listened event %c sync-cookies %c @ ${new Date().toLocaleString()}`, StyledConsole.COLOR_PRIMARY, StyledConsole.COLOR_TEXT)
-
-  await syncCookie(message.data)
-
-  console.groupEnd()
+chrome.runtime.onInstalled.addListener(() => {
+  registerEvent(RUN_TIME_EVENT.SYNC_COOKIE, syncCookie)
 })
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   const { [storageKey]: storageRelations } = await chrome.storage.local.get(storageKey)
@@ -210,6 +207,6 @@ chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   console.groupEnd()
 })
 
-syncCookie()
+doSyncCookie()
 
 console.log('script %csync-cookies', StyledConsole.COLOR_PRIMARY + StyledConsole.FONT_BOLD, 'loaded')

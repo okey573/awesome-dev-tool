@@ -5,10 +5,10 @@ import { useUpdateEffect } from 'ahooks'
 import { Spin } from 'antd'
 import useSuspensePromise from '@/hooks/useSuspensePromise.ts'
 import { RUN_TIME_EVENT, STORAGE_KEY } from '@/enums.ts'
+import { emitEvent } from '@/service-worker/runtime-message-center.ts'
 
 
 const storageKey = STORAGE_KEY.SYNC_COOKIE_RELATIONS
-const eventKey = RUN_TIME_EVENT.SYNC_COOKIE
 const promise = chrome.storage.local.get(storageKey)
 
 const SyncCookie: React.FC = (() => {
@@ -19,10 +19,10 @@ const SyncCookie: React.FC = (() => {
     chrome.storage.local.set({
       [storageKey]: relations
     })
-    chrome.runtime.sendMessage({
-      event: eventKey,
+    emitEvent({
+      event: RUN_TIME_EVENT.SYNC_COOKIE,
       data: relations
-    } as RuntimeMessage)
+    })
   }, [relations])
 
   return <>
