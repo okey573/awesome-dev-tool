@@ -23,7 +23,7 @@ export const listenEvent = async function (message: RuntimeMessage) {
 
   const ev: RUN_TIME_EVENT = message.event
   const events: RuntimeMessageHandler[] = MessageCenter[ev]
-  for (const event of events) {
+  for (const event of events || []) {
     await event(message)
   }
 
