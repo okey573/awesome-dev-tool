@@ -23,9 +23,27 @@ export const removeFistDotHost = (s: string) => {
   }
 }
 
+export const getCurrentWindowTabs: () => Promise<chrome.tabs.Tab[]> = () => {
+  return chrome.tabs.query({
+    currentWindow: true,
+    url: ['*://*/*']
+  })
+}
+
+export const typeOf: (v: any) => string = (v: any) => {
+  return Object.prototype.toString.call(v).match(/\[object (.*?)\]/)![1].toLowerCase()
+}
+
+export const isObject = (v: any) => {
+  return typeOf(v) === 'object'
+}
+
 export default {
   getHost,
   getHostname,
   getDomain,
-  removeFistDotHost
+  removeFistDotHost,
+  getCurrentWindowTabs,
+  typeOf,
+  isObject
 }

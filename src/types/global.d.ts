@@ -3,6 +3,15 @@ interface RuntimeMessage {
   data: any
 }
 
+type RuntimeMessageHandler = (e: RuntimeMessage) => void
+
+interface GroupedTab {
+  name: string,
+  tabs: chrome.tabs.Tab[]
+}
+
+type GroupedTabs = Array<GroupedTab>
+
 declare namespace SyncCookie {
   interface Relation {
     key: string;
