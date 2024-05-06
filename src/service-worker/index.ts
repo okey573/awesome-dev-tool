@@ -1,5 +1,5 @@
 import './sync-cookies'
-import './disguise-request'
+// import './disguise-request'
 import './tab-groups-manager.ts'
 import { registerEvent } from '@/service-worker/runtime-message-center.ts'
 import { RUN_TIME_EVENT } from '@/enums.ts'

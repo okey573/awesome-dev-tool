@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { ConfigProvider, Menu, MenuProps } from 'antd'
 import SyncCookie from './views/sync-cookie'
-import DisguiseRequest from './views/disguise-request'
+// import DisguiseRequest from './views/disguise-request'
 // import GroupTabs from './views/group-tasbs'
 
 const App: React.FC = () => {
@@ -12,10 +12,10 @@ const App: React.FC = () => {
       label: '同步cookie',
       key: '/syncCookie',
     },
-    {
-      label: '伪装请求',
-      key: '/disguiseRequest',
-    },
+    // {
+    //   label: '伪装请求',
+    //   key: '/disguiseRequest',
+    // },
     // {
     //   label: '标签页分组',
     //   key: '/groupTabs',
@@ -46,7 +46,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/syncCookie" replace />} />
         <Route path="/syncCookie" element={<SyncCookie />} />
-        <Route path="/disguiseRequest" element={<DisguiseRequest />} />
+        {/*<Route path="/disguiseRequest" element={<DisguiseRequest />} />*/}
         {/*<Route path="/groupTabs" element={<GroupTabs />} />*/}
       </Routes>
     </div>

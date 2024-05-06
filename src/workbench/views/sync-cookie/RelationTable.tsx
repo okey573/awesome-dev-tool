@@ -105,6 +105,7 @@ const RelationTable: React.FC<{
       dataIndex: 'from',
       editable: true,
       width: '35%',
+      ellipsis: true,
       align: 'center' as const
     },
     {
@@ -112,6 +113,7 @@ const RelationTable: React.FC<{
       dataIndex: 'to',
       editable: true,
       width: '35%',
+      ellipsis: true,
       align: 'center' as const
     },
     {
