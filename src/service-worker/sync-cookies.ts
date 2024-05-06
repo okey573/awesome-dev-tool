@@ -159,7 +159,7 @@ const syncCookie = async(message: RuntimeMessage) => {
   await doSyncCookie(message.data)
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onStartup.addListener(() => {
   registerEvent(RUN_TIME_EVENT.SYNC_COOKIE, syncCookie)
   doSyncCookie()
 })

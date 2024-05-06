@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(async (message: RuntimeMessage) => {
 })
 
 
-chrome.runtime.onInstalled.addListener(async function () {
+chrome.runtime.onStartup.addListener(async function () {
   const existingRules = await chrome.declarativeNetRequest.getDynamicRules()
   chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: existingRules.map((rule) => rule.id),

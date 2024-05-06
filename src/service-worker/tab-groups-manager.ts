@@ -53,7 +53,7 @@ const unGroupTabs = async () => {
   await doUnGroupTabs(await getCurrentWindowTabs())
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onStartup.addListener(() => {
   registerEvent(RUN_TIME_EVENT.CHANGE_GROUP_TABS, changeGroupTabs)
   registerEvent(RUN_TIME_EVENT.GROUP_TABS, groupTabs)
   registerEvent(RUN_TIME_EVENT.UNGROUP_TABS, unGroupTabs)
