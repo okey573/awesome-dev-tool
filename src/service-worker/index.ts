@@ -28,6 +28,4 @@ const openWorkbench = async () => {
   }
 }
 
-chrome.runtime.onStartup.addListener(() => {
-  registerEvent(RUN_TIME_EVENT.OPEN_WORKBENCH, openWorkbench)
-})
+registerEvent(RUN_TIME_EVENT.OPEN_WORKBENCH, openWorkbench)

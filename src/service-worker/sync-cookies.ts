@@ -159,10 +159,6 @@ const syncCookie = async(message: RuntimeMessage) => {
   await doSyncCookie(message.data)
 }
 
-chrome.runtime.onStartup.addListener(() => {
-  registerEvent(RUN_TIME_EVENT.SYNC_COOKIE, syncCookie)
-  doSyncCookie()
-})
 chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   const { [storageKey]: storageRelations } = await chrome.storage.local.get(storageKey)
   const relations = storageRelations || [] as SyncCookie.Relation[]
@@ -208,5 +204,7 @@ chrome.cookies.onChanged.addListener(async ({ cause, cookie, removed }) => {
   console.groupEnd()
 })
 
+registerEvent(RUN_TIME_EVENT.SYNC_COOKIE, syncCookie)
+doSyncCookie()
 
 console.log('script %csync-cookies', StyledConsole.COLOR_PRIMARY + StyledConsole.FONT_BOLD, 'loaded')
