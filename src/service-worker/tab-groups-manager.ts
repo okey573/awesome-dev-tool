@@ -33,6 +33,7 @@ const doGroupTabs = async (tabs: chrome.tabs.Tab[]) => {
 }
 
 const doUnGroupTabs = async (tabs: chrome.tabs.Tab[]) => {
+  // FIXME  Saved groups are not editable ???
   await chrome.tabs.ungroup(tabs.map(tab => tab.id!))
 }
 

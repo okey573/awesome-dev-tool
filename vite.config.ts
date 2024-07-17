@@ -36,6 +36,7 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1024,
+    // sourcemap: true,
     watch: {},
     rollupOptions: {
       input: {
